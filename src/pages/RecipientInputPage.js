@@ -121,8 +121,28 @@ function renderRelationship(input) {
       <label class="form-label">First, what is their name?</label>
       <input type="text" id="input-name" class="form-input" placeholder="e.g. Sarah" value="${input.name || ''}" />
     </div>
+
+    <label class="form-label mt-8">What is their gender? (For a better avatar)</label>
+    <div class="radio-grid mb-4" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="radio-card gender-card ${input.gender === 'male' ? 'selected' : ''}" data-gender="male">
+        <span>👨 Male</span>
+      </div>
+      <div class="radio-card gender-card ${input.gender === 'female' ? 'selected' : ''}" data-gender="female">
+        <span>👩 Female</span>
+      </div>
+      <div class="radio-card gender-card ${input.gender === 'other' ? 'selected' : ''}" data-gender="other">
+        <span>👤 Other</span>
+      </div>
+    </div>
+
+    ${input.gender === 'other' ? `
+      <div class="form-group mb-8">
+        <label class="form-label" style="font-size: 0.95rem;">Please specify</label>
+        <input type="text" id="input-custom-gender" class="form-input" style="padding: 10px; max-width: 400px;" placeholder="e.g. Non-binary" value="${input.customGender || ''}" />
+      </div>
+    ` : ''}
     
-    <label class="form-label mt-8">What is your relationship to them?</label>
+    <label class="form-label mt-4">What is your relationship to them?</label>
     <div class="radio-grid mb-8">
       ${RELATIONSHIP_TYPES.map(rel => `
         <div class="radio-card rel-card ${input.relationship === rel.id ? 'selected' : ''}" data-id="${rel.id}">
@@ -235,6 +255,14 @@ function attachListeners() {
     });
   }
 
+  // Custom Gender Input
+  const customGender = document.getElementById('input-custom-gender');
+  if (customGender) {
+    customGender.addEventListener('input', (e) => {
+      store.setNested('recipientInput', { customGender: e.target.value });
+    });
+  }
+
   // Custom Occasion Input
   const customOccasion = document.getElementById('input-custom-occasion');
   if (customOccasion) {
@@ -308,6 +336,13 @@ function attachListeners() {
   });
 
   // Radio Cards (Single-select)
+  document.querySelectorAll('.gender-card').forEach(el => {
+    el.addEventListener('click', () => {
+      store.setNested('recipientInput', { gender: el.dataset.gender });
+      router._handleRouteChange();
+    });
+  });
+
   document.querySelectorAll('.rel-card').forEach(el => {
     el.addEventListener('click', () => {
       store.setNested('recipientInput', { relationship: el.dataset.id });

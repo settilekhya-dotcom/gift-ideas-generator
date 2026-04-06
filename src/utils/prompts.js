@@ -150,8 +150,10 @@ export function buildGiftNotePrompt(profile, brief, giverName = null) {
 
 RECIPIENT: ${profile.name || 'the recipient'}
 GIVER: ${giverName || 'the giver'}
-RELATIONSHIP: ${profile.relationshipLabel}
+RELATIONSHIP: ${profile.relationshipLabel} (${profile.closenessLabel})
 OCCASION: ${profile.occasionLabel}
+PERSONALITY: ${profile.personalityLabels.join(', ')}
+INTERESTS: ${profile.interestsList.join(', ')}
 GIFT DIRECTION: ${brief.headline}
 WHAT THE GIVER WANTS TO EXPRESS: ${profile.intentLabels.join(', ')}
 ${hasMemory ? `CRITICAL PERSONAL MEMORY/DETAIL: "${profile.sharedMemory}"` : ''}
@@ -163,7 +165,8 @@ CRITICAL INSTRUCTIONS FOR TONE AND STYLE:
 - Avoid ALL common AI cliches (e.g., "I hope this gift...", "Wishing you a tapestry of...", "In the symphony of life...").
 - Keep it grounded, natural, and emotionally warm. Do not use overly formal phrasing or generic emotional filler.
 - It should sound like something a real person would say out loud to them.
-${hasMemory ? `- You MUST naturally weave the "CRITICAL PERSONAL MEMORY/DETAIL" into the note. This is the most important part of the prompt. Make the reference feel natural and deeply personal, referencing an inside joke, moment, or 'very them' detail.` : '- Since no specific memory was provided, focus on their personality and what they mean to the giver in a warm, grounded way.'}
+${hasMemory ? `- You MUST naturally weave the "CRITICAL PERSONAL MEMORY/DETAIL" into the note. This is the most important part of the prompt.` : ''}
+- References their PERSONALITY and INTERESTS naturally (e.g., if they are adventurous, mention their spirit; if they love gardening, hide a metaphor in there).
 - Match the intimacy of the relationship (${profile.closenessLabel}).
 - End with a warm, conversational closing appropriate to the relationship.
 

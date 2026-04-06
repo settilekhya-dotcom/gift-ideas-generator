@@ -9,6 +9,10 @@ import { saveJourney } from '../utils/storage.js';
 export function GiftIdeasPage() {
   const state = store.get();
 
+  if (state.isLoading) {
+    return `<div class="container page-shell">${Loader(state.loadingMessage || 'Exploring direction ideas...')}</div>`;
+  }
+
   if (state.error) {
     return `
       <div class="container mt-8 text-center">
@@ -128,11 +132,19 @@ export async function onEnterIdeas() {
     if (!state.isLoading && !state.error) {
       try {
         const profile = buildRecipientProfile(state.recipientInput);
+        
+        // Force immediate re-render to show loader
+        store.set({ isLoading: true, loadingMessage: 'Exploring direction ideas...' });
+        router._handleRouteChange();
+
         const deepDive = await generateDirectionDeepDive(profile, state.recipientInsight, state.selectedDirection);
         deepDive._forDirection = state.selectedDirection;
-        store.set({ directionDeepDive: deepDive });
+        
+        store.set({ directionDeepDive: deepDive, isLoading: false, loadingMessage: '' });
         router._handleRouteChange();
       } catch (e) {
+        console.warn('Direction generation failed:', e);
+        store.set({ isLoading: false, error: e.message || 'Failed to explore this direction.' });
         router._handleRouteChange();
       }
     }
@@ -186,6 +198,7 @@ function attachListeners() {
         saveJourney(store.get());
       }
       
+      store.set({ finalBrief: null }); // Ensure a fresh brief is generated for this specific path
       router.navigate('brief');
     });
   }

@@ -3,7 +3,7 @@
  * Orchestrates the generation of the AI recipient insight
  */
 
-import { callGeminiJSON } from './api.js';
+import { callAIJSON } from './api.js';
 import { buildInsightPrompt, getSystemInstruction } from '../utils/prompts.js';
 import store from './store.js';
 
@@ -18,7 +18,7 @@ export async function generateInsight(profile) {
   try {
     const prompt = buildInsightPrompt(profile);
     
-    const rawInsight = await callGeminiJSON(prompt, {
+    const rawInsight = await callAIJSON(prompt, {
       systemInstruction: getSystemInstruction(),
       temperature: 0.7 
     });

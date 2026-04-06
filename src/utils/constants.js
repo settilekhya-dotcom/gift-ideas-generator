@@ -275,16 +275,25 @@ export const PROFILER_STEPS = [
 
 // ─── Avatar Trait Mappings ──────────────────────────────────────────
 export const AVATAR_COLORS = {
+  // Temperament
   adventurous: '#E8734A',
   calm: '#7BA7A7',
   energetic: '#F4C542',
   thoughtful: '#6B7DB3',
   playful: '#E87BAE',
   reserved: '#8B9DAF',
+  // Social
+  'social-butterfly': '#F48E42',
+  homebody: '#72B36B',
   creative: '#B76EE8',
-  sentimental: '#E88B8B',
+  analytical: '#6B9DB3',
+  empathetic: '#E88B8B',
+  independent: '#8B8BAF',
+  // Values
+  minimalist: '#E5E5E5',
+  sentimental: '#D46B8D',
   practical: '#6BAF6B',
-  romantic: '#D46B8D',
+  romantic: '#E84A5F',
   nostalgic: '#C9A96E',
   spontaneous: '#4AC9E8'
 };
@@ -297,6 +306,14 @@ export const AVATAR_SHAPES = {
     thoughtful: 'hexagon',
     playful: 'wave',
     reserved: 'square'
+  },
+  social: {
+    'social-butterfly': 'burst',
+    homebody: 'square',
+    creative: 'wave',
+    analytical: 'hexagon',
+    empathetic: 'heart',
+    independent: 'diamond'
   },
   values: {
     minimalist: 'circle',

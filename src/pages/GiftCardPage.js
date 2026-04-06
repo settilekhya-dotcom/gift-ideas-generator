@@ -4,6 +4,7 @@ import { Loader } from '../components/UI.js';
 import { generateGiftNote } from '../core/giftNoteGenerator.js';
 import { generateAvatarSvg } from '../core/avatarGenerator.js';
 import { buildRecipientProfile } from '../core/recipientEngine.js';
+import { AVATAR_COLORS } from '../utils/constants.js';
 
 export function GiftCardPage() {
   const state = store.get();
@@ -47,14 +48,18 @@ export function GiftCardPage() {
       </div>
       
       <div class="physical-card animate-slide-up" style="margin-top: var(--spacing-6);">
-        <div class="avatar-wrapper animate-slide-up" style="animation-delay: 0.2s; border-radius: var(--radius-full); overflow: hidden; margin: 0 auto 1.5rem; background: var(--color-surface); box-shadow: var(--shadow-sm); padding: 12px; display: flex; justify-content: center; align-items: center; width: 120px; height: 120px;">
-          <img src="https://api.dicebear.com/7.x/notionists/svg?seed=${encodeURIComponent(state.recipientInput?.name || 'Friend')}" 
+        <div class="avatar-wrapper animate-slide-up" style="animation-delay: 0.2s; border-radius: var(--radius-full); overflow: hidden; margin: 0 auto 1.5rem; background: ${state.recipientInput?.personality?.[0] ? AVATAR_COLORS[state.recipientInput.personality[0]] : 'var(--color-surface)'}; box-shadow: var(--shadow-sm); padding: 0; display: flex; justify-content: center; align-items: center; width: 150px; height: 150px; border: 4px solid var(--color-primary-light);">
+          <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(state.recipientInput?.name || 'Friend')}&backgroundColor=${state.recipientInput?.personality?.[0] ? AVATAR_COLORS[state.recipientInput.personality[0]].replace('#', '') : '2D5A3D'}" 
                onerror="this.outerHTML=this.getAttribute('data-fallback')" 
-               data-fallback="${avatarSvg.replace(/"/g, '&quot;')}"
-               style="width:100%; height:100%; object-fit:cover;" />
+               data-fallback="${state.avatarSvg?.replace(/"/g, '&quot;') || ''}"
+               style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.05);" 
+               alt="Personalized Avatar" />
         </div>
         
-        <div class="note-content animate-slide-up" style="animation-delay: 0.4s; font-family: var(--font-display); font-size: 1.15rem; line-height: 1.6; outline: none; border: 1px dashed transparent; transition: border 0.2s; padding: 0.5rem; cursor: text;" id="gift-note-text" contenteditable="true" onfocus="this.style.border='1px dashed var(--color-primary-light)'" onblur="this.style.border='1px dashed transparent'" title="Click to edit note">
+        <div id="edit-instruction" class="animate-slide-up" style="animation-delay: 0.3s; text-align: center; font-size: 0.8rem; color: var(--color-text-light); margin-bottom: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase;">
+          (Click on the text below to edit your note)
+        </div>
+        <div class="note-content animate-slide-up" style="animation-delay: 0.4s; font-family: var(--font-display); font-size: 1.15rem; line-height: 1.6; outline: none; border: 1px dashed transparent; transition: border 0.2s; padding: 1rem; cursor: text; border-radius: 8px; background: rgba(0,0,0,0.02);" id="gift-note-text" contenteditable="true" onfocus="this.style.border='1px dashed var(--color-primary-light)'" onblur="this.style.border='1px dashed transparent'" title="Click to edit note">
 ${noteData.note}
         </div>
 

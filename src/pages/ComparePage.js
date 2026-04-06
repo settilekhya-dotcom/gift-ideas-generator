@@ -155,7 +155,11 @@ function attachListeners() {
       const match = store.get('shortlist').find(item => item.directionId === dirId);
       // When a user commits to a direction from compare, we set it as selected
       // and navigate to the brief logic
-      store.set({ selectedDirection: dirId, directionDeepDive: match?.deepDive || null });
+      store.set({ 
+        selectedDirection: dirId, 
+        directionDeepDive: match?.deepDive || null,
+        finalBrief: null // Clear stale brief
+      });
       router.navigate('brief');
     });
   });

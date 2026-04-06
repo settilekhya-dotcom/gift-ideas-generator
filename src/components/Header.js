@@ -25,9 +25,9 @@ export function Header() {
       <div style="background:var(--color-surface); padding:2rem; border-radius:var(--radius-lg); width:90%; max-width:400px; box-shadow:var(--shadow-lg);">
         <h3 style="margin-bottom:1rem;">Settings</h3>
         <p style="font-size:0.9rem; color:var(--color-text-light); margin-bottom:1rem;">
-          Enter your Gemini API Key. It is stored locally in your browser and never sent anywhere else.
+          Enter your Groq API Key. It is stored locally in your browser and never sent anywhere else.
         </p>
-        <input type="password" id="input-api-key" class="form-input" style="width:100%; padding:0.5rem; margin-bottom:1.5rem;" placeholder="AIzaSy...">
+        <input type="password" id="input-api-key" class="form-input" style="width:100%; padding:0.5rem; margin-bottom:1.5rem;" placeholder="gsk_...">
         <div style="display:flex; justify-content:flex-end; gap:1rem;">
           <button id="btn-close-settings" class="btn btn-secondary">Close</button>
           <button id="btn-save-settings" class="btn btn-primary">Save Key</button>

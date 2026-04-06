@@ -15,6 +15,8 @@ const initialState = {
   // Recipient Input (Step 2)
   recipientInput: {
     name: '',
+    gender: '',            // 'male' | 'female' | 'other'
+    customGender: '',      // String for 'other' selection
     personality: [],       // Array of trait IDs
     interests: [],         // Array of interest strings
     relationship: null,    // Relationship type ID

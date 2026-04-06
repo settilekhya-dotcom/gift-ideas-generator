@@ -3,7 +3,7 @@
  * Handles the AI deep-dive generation for a specific gift direction
  */
 
-import { callGeminiJSON } from './api.js';
+import { callAIJSON } from './api.js';
 import { buildDirectionPrompt, getSystemInstruction } from '../utils/prompts.js';
 import { GIFT_DIRECTIONS } from '../utils/constants.js';
 import store from './store.js';
@@ -24,7 +24,7 @@ export async function generateDirectionDeepDive(profile, insight, directionId) {
   try {
     const prompt = buildDirectionPrompt(profile, direction, insight);
     
-    const rawDeepDive = await callGeminiJSON(prompt, {
+    const rawDeepDive = await callAIJSON(prompt, {
       systemInstruction: getSystemInstruction(),
       temperature: 0.8 // Slightly higher creativity for gift ideas
     });

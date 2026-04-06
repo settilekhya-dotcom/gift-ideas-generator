@@ -3,7 +3,7 @@
  * Generates comparison scoring and reasoning for shortlisted directions
  */
 
-import { callGeminiJSON } from './api.js';
+import { callAIJSON } from './api.js';
 import { buildComparisonPrompt, getSystemInstruction } from '../utils/prompts.js';
 import { GIFT_DIRECTIONS } from '../utils/constants.js';
 import store from './store.js';
@@ -31,7 +31,7 @@ export async function compareDirections(profile, insight, shortlist) {
   try {
     const prompt = buildComparisonPrompt(profile, insight, hydratedShortlist);
     
-    const rawResult = await callGeminiJSON(prompt, {
+    const rawResult = await callAIJSON(prompt, {
       systemInstruction: getSystemInstruction(),
       temperature: 0.6 // Slightly lower for more objective scoring
     });

@@ -3,6 +3,7 @@ import router from '../core/router.js';
 import { Loader } from '../components/UI.js';
 import { generateFinalBrief } from '../core/giftNoteGenerator.js';
 import { buildRecipientProfile } from '../core/recipientEngine.js';
+import { GIFT_DIRECTIONS } from '../utils/constants.js';
 
 export function FinalBriefPage() {
   const state = store.get();
@@ -109,20 +110,51 @@ export function FinalBriefPage() {
 export async function onEnterBrief() {
   const state = store.get();
   
-  if (state.selectedDirection && !state.finalBrief && !state.isLoading && !state.error) {
+  if (!state.selectedDirection) {
+    if (state.shortlist.length > 0) {
+      store.set({ 
+        selectedDirection: state.shortlist[0].directionId, 
+        directionDeepDive: state.shortlist[0].deepDive,
+        finalBrief: null 
+      });
+      router._handleRouteChange();
+      return;
+    } else {
+      router.navigate('insight');
+      return;
+    }
+  }
+
+  // Safety: if insight is missing (e.g., refresh), go back to generate it
+  if (!state.recipientInsight) {
+    router.navigate('insight');
+    return;
+  }
+
+  const briefMatches = state.finalBrief?.direction?.id === state.selectedDirection;
+  
+  if (state.selectedDirection && (!state.finalBrief || !briefMatches) && !state.isLoading && !state.error) {
     try {
       const profile = buildRecipientProfile(state.recipientInput);
       let deepDive = state.directionDeepDive;
       
-      // Safety check: if memory doesn't match selected direction, pull from shortlist
       if (deepDive?._forDirection !== state.selectedDirection) {
         const item = state.shortlist.find(i => i.directionId === state.selectedDirection);
         if (item) deepDive = item.deepDive;
       }
       
-      await generateFinalBrief(profile, state.recipientInsight, state.selectedDirection, deepDive);
+      // Update store and tell the router to re-render to the 'Thinking' state
+      store.set({ isLoading: true, loadingMessage: 'Preparing your final brief...' });
+      router._handleRouteChange();
+      
+      const brief = await generateFinalBrief(profile, state.recipientInsight, state.selectedDirection, deepDive);
+      
+      // Clear loading state and set result
+      store.set({ finalBrief: brief, isLoading: false, loadingMessage: '', error: null });
       router._handleRouteChange();
     } catch(e) {
+      console.warn('Brief generation failed:', e);
+      store.set({ isLoading: false, error: e.message || 'Brief generation failed.' });
       router._handleRouteChange();
     }
   }

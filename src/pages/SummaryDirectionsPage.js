@@ -8,10 +8,18 @@ import { GIFT_DIRECTIONS } from '../utils/constants.js';
 export function SummaryDirectionsPage() {
   const state = store.get();
   
-  if (state.isLoading || !state.recipientInsight) {
+  if (state.isLoading) {
     return `
       <div class="container page-shell animate-fade-in" style="min-height: 70vh; display: flex; align-items: center; justify-content: center;">
-        ${Loader(state.loadingMessage || 'Processing brief...')}
+        ${Loader(state.loadingMessage || 'Crafting recipient insights...')}
+      </div>
+    `;
+  }
+  
+  if (!state.recipientInsight && !state.error) {
+    return `
+      <div class="container page-shell animate-fade-in" style="min-height: 70vh; display: flex; align-items: center; justify-content: center;">
+        ${Loader(state.loadingMessage || 'Crafting recipient insights...')}
       </div>
     `;
   }
@@ -67,9 +75,18 @@ export async function onEnterSummary() {
   if (!state.recipientInsight && !state.isLoading && !state.error) {
     try {
       const profile = buildRecipientProfile(state.recipientInput);
+      
+      // Force immediate re-render to show loader
+      store.set({ isLoading: true, loadingMessage: 'Crafting recipient insights...' });
+      router._handleRouteChange();
+      
       await generateInsight(profile);
+      
+      store.set({ isLoading: false, loadingMessage: '' });
       router._handleRouteChange(); // Re-render with new data
     } catch (e) {
+      console.warn('Insight generation failed:', e);
+      store.set({ isLoading: false, error: e.message || 'Failed to generate recipient insights.' });
       router._handleRouteChange(); // Re-render with error
     }
   }

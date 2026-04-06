@@ -2,7 +2,7 @@
  * The Gift Brief — Gift Note & Brief Generator
  */
 
-import { callGeminiJSON } from './api.js';
+import { callAIJSON } from './api.js';
 import { buildGiftBriefPrompt, buildGiftNotePrompt, getSystemInstruction } from '../utils/prompts.js';
 import { GIFT_DIRECTIONS } from '../utils/constants.js';
 import store from './store.js';
@@ -22,7 +22,7 @@ export async function generateFinalBrief(profile, insight, directionId, deepDive
   try {
     const prompt = buildGiftBriefPrompt(profile, insight, direction, deepDive);
     
-    const rawBrief = await callGeminiJSON(prompt, {
+    const rawBrief = await callAIJSON(prompt, {
       systemInstruction: getSystemInstruction(),
       temperature: 0.7 
     });
@@ -51,8 +51,8 @@ export async function generateFinalBrief(profile, insight, directionId, deepDive
             'Add a short note naming the specific reason you chose it.',
             'Reference a shared moment in how you present the gift.'
           ],
-      topIdea: rawBrief.topIdea || deepDive.whatGiftsFit[0],
-      personalTouch: rawBrief.personalTouch || deepDive.howToPersonalize[0],
+      topIdea: rawBrief.topIdea || deepDive?.whatGiftsFit?.[0] || 'A thoughtful, personalized gift',
+      personalTouch: rawBrief.personalTouch || deepDive?.howToPersonalize?.[0] || 'Add a personal note naming the specific reason you chose it.',
       occasionNote: rawBrief.occasionNote || `Perfect for this occasion.`
     };
 
@@ -102,7 +102,7 @@ export async function generateGiftNote(profile, brief) {
   try {
     const prompt = buildGiftNotePrompt(profile, brief);
     
-    const result = await callGeminiJSON(prompt, {
+    const result = await callAIJSON(prompt, {
       systemInstruction: getSystemInstruction(),
       temperature: 0.8
     });
