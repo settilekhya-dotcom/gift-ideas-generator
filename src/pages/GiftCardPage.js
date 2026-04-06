@@ -49,7 +49,7 @@ export function GiftCardPage() {
       
       <div class="physical-card animate-slide-up" style="margin-top: var(--spacing-6);">
         <div class="avatar-wrapper animate-slide-up" style="animation-delay: 0.2s; border-radius: var(--radius-full); overflow: hidden; margin: 0 auto 1.5rem; background: ${state.recipientInput?.personality?.[0] ? AVATAR_COLORS[state.recipientInput.personality[0]] : 'var(--color-surface)'}; box-shadow: var(--shadow-sm); padding: 0; display: flex; justify-content: center; align-items: center; width: 150px; height: 150px; border: 4px solid var(--color-primary-light);">
-          <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent(state.recipientInput?.name || 'Friend')}&backgroundColor=${state.recipientInput?.personality?.[0] ? AVATAR_COLORS[state.recipientInput.personality[0]].replace('#', '') : '2D5A3D'}" 
+          <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=${encodeURIComponent((state.recipientInput?.name || 'Friend') + '-' + (state.recipientInput?.gender || 'other'))}&backgroundColor=${state.recipientInput?.personality?.[0] ? AVATAR_COLORS[state.recipientInput.personality[0]].replace('#', '') : '2D5A3D'}" 
                onerror="this.outerHTML=this.getAttribute('data-fallback')" 
                data-fallback="${state.avatarSvg?.replace(/"/g, '&quot;') || ''}"
                style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.05);" 
