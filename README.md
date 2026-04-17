@@ -1,4 +1,4 @@
-# 🧭 Gift Compass (The Gift Brief)
+# 🧭 The Gift Brief
 
 **Find gift ideas that actually feel like them.**  
 Most gift recommendation apps give you a "shopping list." We give you a "compass."
